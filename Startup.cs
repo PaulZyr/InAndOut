@@ -48,6 +48,12 @@ namespace InAndOut
 
             app.UseEndpoints(endpoints =>
             {
+                // Blog; Blob/Article; Blog/ArticleName;
+                endpoints.MapControllerRoute(
+                   name: "blog",
+                   pattern: "blog/{*article}",
+                   defaults: new { controller = "Blog", action = "Article" });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
