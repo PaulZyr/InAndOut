@@ -44,9 +44,13 @@ namespace InAndOut.Controllers
         {
             try
             {
-                _db.Expenses.Add(obj);
-                _db.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                if(ModelState.IsValid)
+                {
+                    _db.Expenses.Add(obj);
+                    _db.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(obj);
             }
             catch
             {
@@ -54,41 +58,74 @@ namespace InAndOut.Controllers
             }
         }
 
-        // GET: ExpensesController/Edit/5
-        public ActionResult Edit(int id)
+        // GET ExpensesController/Delete
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null || id==0)
+            {
+                return NotFound();
+            }
+
+            var obj = _db.Expenses.Find(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
         }
 
-        // POST: ExpensesController/Edit/5
+        // POST ExpensesController/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult DeletePost(int? id)
+        {
+            var obj = _db.Expenses.Find(id);
+
+            if(obj == null)
+            {
+                return NotFound();
+            }
+
+            _db.Expenses.Remove(obj);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET ExpensesController/Update
+        public ActionResult Update(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = _db.Expenses.Find(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        // POST: ExpensesController/Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(Expense obj)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ExpensesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ExpensesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _db.Expenses.Update(obj);
+                    _db.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(obj);
             }
             catch
             {
