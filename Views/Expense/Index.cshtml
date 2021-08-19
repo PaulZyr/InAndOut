@@ -9,7 +9,7 @@
             <h2 class="text-primary">My Expenses</h2>
         </div>
         <div class="col-6 text-right">
-            <a asp-controller="Expenses" asp-action="Create" class="btn btn-primary">Create new Expense</a>
+            <a asp-controller="Expense" asp-action="Create" class="btn btn-primary">Create new Expense</a>
         </div>
     </div>
     <br />
@@ -31,8 +31,8 @@
                         <td width="35%">@item.Amount</td>
                         <td width="30%">
                             <div class="w-100 btn-group" role="group">
-                                <a asp-controller="Expenses" asp-action="Update" asp-route-Id="@item.Id" class="btn btn-primary mx-1">Update</a>
-                                <a asp-controller="Expenses" asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger mx-1">Delete</a>
+                                <a asp-controller="Expense" asp-action="Update" asp-route-Id="@item.Id" class="btn btn-primary mx-1">Update</a>
+                                <a asp-controller="Expense" asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger mx-1">Delete</a>
                             </div>
                         </td>
                     </tr>
