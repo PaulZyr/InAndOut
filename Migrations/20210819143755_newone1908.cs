@@ -2,7 +2,7 @@
 
 namespace InAndOut.Migrations
 {
-    public partial class addLenderItemNameColumns : Migration
+    public partial class newone1908 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

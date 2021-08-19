@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace InAndOut.Controllers
 {
-    public class ExpensesController : Controller
+    public class ExpenseController : Controller
     {
         private readonly AppDbContext _db;
 
-        public ExpensesController(AppDbContext db)
+        public ExpenseController(AppDbContext db)
         {
             _db = db;
         }
