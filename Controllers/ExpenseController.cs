@@ -1,7 +1,10 @@
 ﻿using InAndOut.Data;
 using InAndOut.Models;
+using InAndOut.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +23,7 @@ namespace InAndOut.Controllers
         // GET: ExpensesController
         public ActionResult Index()
         {
-            IEnumerable<Expense> objList = _db.Expenses;
+            var objList = _db.Expenses.Include(x => x.ExpenseType);
 
             return View(objList);
         }
@@ -34,19 +37,29 @@ namespace InAndOut.Controllers
         // GET: ExpensesController/Create
         public ActionResult Create()
         {
-            return View();
+            ExpenseVM expenseVM = new ExpenseVM()
+            {
+                Expense = new Expense(),
+                TypeDropDown = _db.ExpenseTypes.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(expenseVM);
         }
 
         // POST: ExpensesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Expense obj)
+        public ActionResult Create(ExpenseVM obj)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    _db.Expenses.Add(obj);
+                    _db.Expenses.Add(obj.Expense);
                     _db.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
@@ -66,22 +79,32 @@ namespace InAndOut.Controllers
                 return NotFound();
             }
 
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.Expenses.Include(x => x.ExpenseType).FirstOrDefault(x => x.Id == id);
 
             if (obj == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            ExpenseVM expenseVM = new ExpenseVM()
+            {
+                Expense = obj,
+                TypeDropDown = _db.ExpenseTypes.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(expenseVM);
         }
 
         // POST ExpensesController/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletePost(int? id)
+        public ActionResult DeletePost(ExpenseVM exp)
         {
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.Expenses.Find(exp.Expense.Id);
 
             if(obj == null)
             {
@@ -109,19 +132,29 @@ namespace InAndOut.Controllers
                 return NotFound();
             }
 
-            return View(obj);
+            ExpenseVM expenseVM = new ExpenseVM()
+            {
+                Expense = obj,
+                TypeDropDown = _db.ExpenseTypes.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(expenseVM);
         }
 
         // POST: ExpensesController/Update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Expense obj)
+        public ActionResult Update(ExpenseVM obj)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _db.Expenses.Update(obj);
+                    _db.Expenses.Update(obj.Expense);
                     _db.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
