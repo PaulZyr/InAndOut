@@ -37,14 +37,6 @@ namespace InAndOut.Controllers
         // GET: ExpensesController/Create
         public ActionResult Create()
         {
-            //IEnumerable<SelectListItem> TypeDropDown = _db.ExpenseTypes.Select(i => new SelectListItem
-            //{
-            //    Text = i.Name,
-            //    Value = i.Id.ToString()
-            //});
-
-            //ViewBag.TypeDropDown = TypeDropDown;
-
             ExpenseVM expenseVM = new ExpenseVM()
             {
                 Expense = new Expense(),
@@ -110,9 +102,9 @@ namespace InAndOut.Controllers
         // POST ExpensesController/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletePost(int? id)
+        public ActionResult DeletePost(ExpenseVM exp)
         {
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.Expenses.Find(exp.Expense.Id);
 
             if(obj == null)
             {
